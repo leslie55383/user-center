@@ -12,6 +12,8 @@ import org.springframework.util.DigestUtils;
 
 import java.util.Arrays;
 
+import static com.node.userCenter.contant.UserConstant.USER_LOGIN_STATE;
+
 /**
 * @author leslie
 * @description 针对表【user(用户)】的数据库操作Service实现
@@ -22,7 +24,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     implements UserService{
 
     private static final byte[] SALT = "leslie".getBytes();
-    private static final String USER_LOGIN_STATE = "userLoginState";
+
     @Override
     public long userRegister(String userAccount, String userPassword, String checkPassword) {
         //1.校验
@@ -96,8 +98,28 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if(user==null){
             return null;
         }
-        request.getSession().setAttribute("USER_LOGIN_STATE",user);
+        //用户脱敏
+        User safeUser = getSafetyUser(user);
+
+        request.getSession().setAttribute(USER_LOGIN_STATE,safeUser);
         return user;
+    }
+
+
+    @Override
+    public User getSafetyUser(User user) {
+        User safeUser = new User();
+        safeUser.setId(user.getId());
+        safeUser.setUsername(user.getUsername());
+        safeUser.setUserAccount(user.getUserAccount());
+        safeUser.setAvatarUrl(user.getAvatarUrl());
+        safeUser.setGender(user.getGender());
+        safeUser.setPhone(user.getPhone());
+        safeUser.setEmail(user.getEmail());
+        safeUser.setUserRole(user.getUserRole());
+        safeUser.setCreateTime(user.getCreateTime());
+        safeUser.setUpdateTime(user.getUpdateTime());
+        return safeUser;
     }
 }
 

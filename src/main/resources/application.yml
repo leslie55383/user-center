@@ -8,6 +8,9 @@ spring:
     password: 123456
 server:
   port: 8080
+  reactive:
+    session:
+      timeout: 86400
 
 
 mybatis-plus:
