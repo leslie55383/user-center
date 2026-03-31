@@ -27,7 +27,6 @@ import static com.node.userCenter.contant.UserConstant.USER_LOGIN_STATE;
 public class UserController {
     @Resource
     private UserService userService;
-
     @PostMapping("/register")
     public Long userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
         if(userRegisterRequest == null){
