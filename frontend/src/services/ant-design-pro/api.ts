@@ -20,14 +20,51 @@ export async function outLogin(options?: { [key: string]: any }) {
   });
 }
 
-/** 登录接口 POST /api/login/account */
-export async function login(body: API.LoginParams, options?: { [key: string]: any }) {
-  return request<API.LoginResult>('/api/login/account', {
+/** 1. 登录接口 POST /api/user/login */
+export async function login(body: any, options?: { [key: string]: any }) {
+  // 注意：这里的路径改成了 /api/user/login
+  return request<any>('/api/user/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     data: body,
+    ...(options || {}),
+  });
+}
+/** 2. 注册接口 POST /api/user/register */
+export async function register(body: any, options?: { [key: string]: any }) {
+  return request<any>('/api/user/register', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 3. 查询用户接口 GET /api/user/searchUser */
+export async function searchUser(username?: string, options?: { [key: string]: any }) {
+  return request<any>('/api/user/searchUser', {
+    method: 'GET',
+    // GET 请求的参数用 params 传递
+    params: {
+      username: username,
+    },
+    ...(options || {}),
+  });
+}
+
+/** 4. 删除用户接口 POST /api/user/delete */
+export async function deleteUser(id: number, options?: { [key: string]: any }) {
+  return request<any>('/api/user/delete', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    // 注意：你后端用的是 @RequestBody Long id，所以直接传数字
+    data: id,
     ...(options || {}),
   });
 }
